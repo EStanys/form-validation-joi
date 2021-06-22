@@ -18,7 +18,7 @@
 .main-form form {
   display: flex;
   flex-direction: column;
-  max-width: 40%;
+  width: 50%;
 }
 
 .main-form input {
@@ -76,4 +76,13 @@
   margin-top: -0.8rem;
   margin-bottom: 0.4rem;
 
+}
+
+.flex {
+  display: flex;
+  gap: 1.5em;
+  width:100%
+}
+.flex div {
+  width: 50%;
 }

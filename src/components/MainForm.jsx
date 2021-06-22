@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Joi from 'joi-browser'
+import ValidationResults from './ValidationResults';
 
 export default class MainForm extends Component {
   state = {
@@ -47,7 +48,9 @@ export default class MainForm extends Component {
       console.log('cia', result.error.details[0].message);
       this.setState({ errors: { ...this.state.errors, [name]: result.error.details[0].message } });
     } else {
-      this.setState({ errors: { ...this.state.errors, [name]: '' } });
+      const errorsCopy = { ...this.state.errors}
+      delete errorsCopy[name]
+      this.setState({ errors: errorsCopy });
     }
   }
 
@@ -79,65 +82,74 @@ export default class MainForm extends Component {
     // }
   }
 
+  passProps(){
+    if (this.state.errors.password) return true;
+    if (this.state.errors.repeatPassword) return true;
+    return false
+  }
+
   render() {
     return (
       <div className="main-form">
         <h1>Main form</h1>
-        <form onSubmit={this.formSubmitHandler}>
-          <label htmlFor="userName">User name</label>
-          <input
-            value={this.state.account.userName}
-            className={this.state.errors.userName && 'isInvalid'}
-            type="text"
-            name="userName"
-            onChange={this.syncInput}
-          />
-          {this.state.errors.userName && <p className="err-msg">{this.state.errors.userName}</p>}
-
-          <label htmlFor="email">Email</label>
-          <input
-            value={this.state.account.email}
-            className={this.state.errors.email && 'isInvalid'}
-            type="text"
-            name="email"
-            onChange={this.syncInput}
-          />
-          {this.state.errors.email && <p className="err-msg">{this.state.errors.email}</p>}
-
-          <label htmlFor="password">Password</label>
-          <input
-            value={this.state.account.password}
-            className={this.state.errors.password && 'isInvalid'}
-            type="text"
-            name="password"
-            onChange={this.syncInput}
-          />
-          {this.state.errors.password && <p className="err-msg">{this.state.errors.password}</p>}
-
-          <label htmlFor="repeatPassword">Reapeat password</label>
-          <input
-            value={this.state.account.repeatPassword}
-            className={this.state.errors.repeatPassword && 'isInvalid'}
-            type="text"
-            name="repeatPassword"
-            onChange={this.syncInput}
-          />
-          {this.state.errors.repeatPassword && <p className="err-msg">{this.state.errorMessages.repeatPassword}</p>}
-
-          <div className="main-form__agreement">
+        <div className="flex">
+          <form onSubmit={this.formSubmitHandler}>
+            <label htmlFor="userName">User name</label>
             <input
-              value={this.state.account.agreement}
-              className={this.state.errors.agreement && 'isInvalid'}
-              type="checkbox"
-              name="agreement"
-              onChange={this.syncCheck}
+              value={this.state.account.userName}
+              className={this.state.errors.userName && 'isInvalid'}
+              type="text"
+              name="userName"
+              onChange={this.syncInput}
             />
-            <label htmlFor="agreement">Agreement</label>
-          </div>
-          {this.state.errors.agreement && <p className="err-msg">{this.state.errorMessages.agreement}</p>}
+            {this.state.errors.userName && <p className="err-msg">{this.state.errors.userName}</p>}
 
-          <button>Submit</button>
-        </form>
+            <label htmlFor="email">Email</label>
+            <input
+              value={this.state.account.email}
+              className={this.state.errors.email && 'isInvalid'}
+              type="text"
+              name="email"
+              onChange={this.syncInput}
+            />
+            {this.state.errors.email && <p className="err-msg">{this.state.errors.email}</p>}
+
+            <label htmlFor="password">Password</label>
+            <input
+              value={this.state.account.password}
+              className={this.state.errors.password && 'isInvalid'}
+              type="text"
+              name="password"
+              onChange={this.syncInput}
+            />
+            {this.state.errors.password && <p className="err-msg">{this.state.errors.password}</p>}
+
+            <label htmlFor="repeatPassword">Reapeat password</label>
+            <input
+              value={this.state.account.repeatPassword}
+              className={this.state.errors.repeatPassword && 'isInvalid'}
+              type="text"
+              name="repeatPassword"
+              onChange={this.syncInput}
+            />
+            {this.state.errors.repeatPassword && <p className="err-msg">{this.state.errorMessages.repeatPassword}</p>}
+
+            <div className="main-form__agreement">
+              <input
+                value={this.state.account.agreement}
+                className={this.state.errors.agreement && 'isInvalid'}
+                type="checkbox"
+                name="agreement"
+                onChange={this.syncCheck}
+              />
+              <label htmlFor="agreement">Agreement</label>
+            </div>
+            {this.state.errors.agreement && <p className="err-msg">{this.state.errorMessages.agreement}</p>}
+
+            <button>Submit</button>
+          </form>
+          <ValidationResults passErr={this.passProps()} />
+        </div>
       </div>
     );
   }
